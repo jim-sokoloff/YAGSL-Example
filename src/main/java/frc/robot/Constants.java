@@ -50,4 +50,13 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+  public static class PneumaticsConstants
+  {
+    public static final int liftForwardChanel = 1;
+    public static final int liftReverseChanel = 0;
+
+    public static final int spatulaForwardChanel = 7;
+    public static final int spatulaReverseChanel = 6;
+  }
 }
