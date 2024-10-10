@@ -84,7 +84,9 @@ public class RobotContainer
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> -driverXbox.getRightX());
+        () -> -driverXbox.getRightX() +
+              (driverXbox.button(5).getAsBoolean() ? 0.4 : 0) + 
+              (driverXbox.button(6).getAsBoolean() ? -0.4 : 0));
 
     
 
@@ -111,18 +113,28 @@ public class RobotContainer
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-    driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-    driverXbox.b().whileTrue(
+    driverXbox.b().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    //driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+    /*driverXbox.b().whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(
                                    new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
                               ));
-    driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
-    driverXbox.leftBumper().onTrue(new InstantCommand(() -> pneumatics.forwardLiftSolenoid()));
-    driverXbox.leftBumper().onFalse(new InstantCommand(() -> pneumatics.reverseLiftSolenoid()));
-    driverXbox.rightBumper().onTrue(new InstantCommand(() -> pneumatics.forwardSpatulaSolenoid()));
-    driverXbox.rightBumper().onFalse(new InstantCommand(() -> pneumatics.reverseSpatulaSolenoid()));
-    // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+                              */
+    //driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
+    driverXbox.y().onTrue(new InstantCommand(() -> pneumatics.forwardLiftSolenoid()));
+    driverXbox.y().onFalse(new InstantCommand(() -> pneumatics.reverseLiftSolenoid()));
+    driverXbox.a().onTrue(new InstantCommand(() -> pneumatics.forwardSpatulaSolenoid()));
+    driverXbox.a().onFalse(new InstantCommand(() -> pneumatics.reverseSpatulaSolenoid()));
+    driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
+    driverXbox.povUp().whileTrue(drivebase.drivePOV(1, 0, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
+    driverXbox.povUpLeft().whileTrue(drivebase.drivePOV(1, 1, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
+    driverXbox.povUpRight().whileTrue(drivebase.drivePOV(1, -1, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
+    driverXbox.povDown().whileTrue(drivebase.drivePOV(-1, 0, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
+    driverXbox.povDownLeft().whileTrue(drivebase.drivePOV(-1, 1, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
+    driverXbox.povDownRight().whileTrue(drivebase.drivePOV(-1, -1, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
+    driverXbox.povLeft().whileTrue(drivebase.drivePOV(0, 1, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
+    driverXbox.povRight().whileTrue(drivebase.drivePOV(0, -1, () -> ((driverXbox.button(5).getAsBoolean() ? 0.1 : 0) + (driverXbox.button(6).getAsBoolean() ? -0.1 : 0))));
   }
 
   /**
