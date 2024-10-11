@@ -19,6 +19,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+
+import com.pathplanner.lib.auto.NamedCommands;
+
 import frc.robot.subsystems.Pneumatics;
 
 /**
@@ -31,7 +34,6 @@ public class RobotContainer
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
-
   // The robot's subsystems and commands are defined here...
   private final Pneumatics pneumatics = new Pneumatics();
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -44,6 +46,7 @@ public class RobotContainer
   {
     // Configure the trigger bindings
     configureBindings();
+    registerNamedCommands();
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -109,6 +112,11 @@ public class RobotContainer
    * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
+  private void registerNamedCommands() {
+    NamedCommands.registerCommand("forwardSpatula", new InstantCommand(() -> pneumatics.forwardSpatulaSolenoid()));
+    NamedCommands.registerCommand("reverseSpatula", new InstantCommand(() -> pneumatics.reverseSpatulaSolenoid()));
+  }
+
   private void configureBindings()
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
@@ -145,7 +153,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("One Foot Slow Auto");
+    return drivebase.getAutonomousCommand("Blue Alliance Auto");
     // return drivebase.getAutonomousCommand("3 meters ahead Auto");
     // return drivebase.getAutonomousCommand("3 meters ahead-no preset Auto");
     // return drivebase.getAutonomousCommand("Spoil Midline Auto");
