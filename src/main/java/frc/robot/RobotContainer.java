@@ -145,7 +145,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("3 meters ahead Auto");
+    return drivebase.getAutonomousCommand("One Foot Slow Auto");
+    // return drivebase.getAutonomousCommand("3 meters ahead Auto");
     // return drivebase.getAutonomousCommand("3 meters ahead-no preset Auto");
     // return drivebase.getAutonomousCommand("Spoil Midline Auto");
   }
